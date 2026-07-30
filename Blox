@@ -1,0 +1,217 @@
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+local RunService = game:GetService("RunService")
+local CoreGui = game:GetService("CoreGui")
+local Players = game:GetService("Players")
+
+-- ==================== [ใส่ ID รูปภาพของคุณตรงนี้] ====================
+local BACKGROUND_IMAGE_ID = "rbxassetid://YOUR_BACKGROUND_IMAGE_ID_HERE" -- ใส่ ID ภาพที่ 1
+local TOGGLE_ICON_ID = "rbxassetid://YOUR_CIRCLE_ICON_ID_HERE"            -- ใส่ ID ภาพที่ 2
+-- ===================================================================
+
+local Window = Rayfield:CreateWindow({
+   Name = "Lucky Block Spawner",
+   LoadingTitle = "กำลังโหลดสคริปต์...",
+   LoadingSubtitle = "by Assistant",
+   ConfigurationSaving = { Enabled = false }
+})
+
+-- ==================== BACKGROUND IMAGE ====================
+pcall(function()
+    local bgScreen = Instance.new("ScreenGui")
+    bgScreen.Name = "RayfieldCustomBG"
+    bgScreen.Parent = CoreGui
+    
+    local bgImage = Instance.new("ImageLabel")
+    bgImage.Size = UDim2.new(1, 0, 1, 0)
+    bgImage.Position = UDim2.new(0, 0, 0, 0)
+    bgImage.Image = BACKGROUND_IMAGE_ID
+    bgImage.BackgroundTransparency = 1
+    bgImage.ImageTransparency = 0.3
+    bgImage.Parent = bgScreen
+end)
+
+-- ==================== FLOATING CIRCLE BUTTON (ปุ่มย่อ/ขยาย) ====================
+pcall(function()
+    local toggleGui = Instance.new("ScreenGui")
+    toggleGui.Name = "RayfieldToggleBtn"
+    toggleGui.Parent = CoreGui
+
+    local toggleBtn = Instance.new("ImageButton")
+    toggleBtn.Size = UDim2.new(0, 50, 0, 50)
+    toggleBtn.Position = UDim2.new(0.05, 0, 0.2, 0)
+    toggleBtn.Image = TOGGLE_ICON_ID
+    toggleBtn.BackgroundTransparency = 1
+    toggleBtn.Parent = toggleGui
+
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim2.new(1, 0)
+    corner.Parent = toggleBtn
+
+    local isVisible = true
+    toggleBtn.MouseButton1Click:Connect(function()
+        isVisible = not isVisible
+        if CoreGui:FindFirstChild("Rayfield") then
+            CoreGui.Rayfield.Enabled = isVisible
+        end
+    end)
+end)
+
+-- ==================== TAB 1: MAIN ====================
+local MainTab = Window:CreateTab("Main", 4483362458)
+local spawnDelay = 0.1
+
+local function createSpawnToggle(name, eventName, flag)
+    local active = false
+    MainTab:CreateToggle({
+        Name = name,
+        CurrentValue = false,
+        Flag = flag,
+        Callback = function(Value)
+            active = Value
+            if active then
+                task.spawn(function()
+                    while active do
+                        pcall(function()
+                            game:GetService("ReplicatedStorage"):WaitForChild(eventName):FireServer()
+                        end)
+                        task.wait(spawnDelay)
+                    end
+                end)
+            end
+        end,
+    })
+end
+
+createSpawnToggle("ออโต้เสก Lucky Block", "SpawnLuckyBlock", "AutoLucky")
+createSpawnToggle("ออโต้เสก Rainbow Block", "SpawnRainbowBlock", "AutoRainbow")
+
+-- ==================== TAB 2: PLAYER & COMBAT ====================
+local PlayerTab = Window:CreateTab("Player & Combat", 4483362458)
+
+-- 1. ล่องหน (Invisibility)
+PlayerTab:CreateToggle({
+    Name = "ล่องหน (Invisibility)",
+    CurrentValue = false,
+    Callback = function(Value)
+        local character = Players.LocalPlayer.Character
+        if character then
+            for _, v in pairs(character:GetDescendants()) do
+                if v:IsA("BasePart") or v:IsA("Decal") then
+                    v.Transparency = Value and 1 or 0
+                end
+            end
+        end
+    end,
+})
+
+-- 2. ทะลุสิ่งของแบบสมบูรณ์ (Noclip All)
+local noclip = false
+RunService.Stepped:Connect(function()
+    if noclip then
+        local character = Players.LocalPlayer.Character
+        if character then
+            for _, part in pairs(character:GetDescendants()) do
+                if part:IsA("BasePart") then
+                    part.CanCollide = false
+                end
+            end
+        end
+    end
+end)
+
+PlayerTab:CreateToggle({
+    Name = "ทะลุสิ่งของ (Noclip)",
+    CurrentValue = false,
+    Callback = function(Value)
+        noclip = Value
+    end,
+})
+
+-- 3. เปิด/ปิด เห็นชื่อแบบ ESP (Name ESP)
+local nameESP = false
+
+local function applyNameESP(player)
+    if player == Players.LocalPlayer then return end
+
+    local function addTag(char)
+        if not char then return end
+        local head = char:WaitForChild("Head", 5)
+        if not head then return end
+
+        -- ลบของเก่าออกก่อนป้องกันการซ้ำซ้อน
+        if head:FindFirstChild("NameESP_Tag") then
+            head.NameESP_Tag:Destroy()
+        end
+
+        -- สร้างป้ายชื่อบนหัว
+        local bb = Instance.new("BillboardGui")
+        bb.Name = "NameESP_Tag"
+        bb.Adornee = head
+        bb.Size = UDim2.new(0, 100, 0, 30)
+        bb.StudsOffset = Vector3.new(0, 2, 0)
+        bb.AlwaysOnTop = true -- มองเห็นทะลุกำแพงได้
+        bb.Enabled = nameESP
+
+        local txt = Instance.new("TextLabel")
+        txt.Size = UDim2.new(1, 0, 1, 0)
+        txt.BackgroundTransparency = 1
+        txt.Text = player.Name .. " (@" .. player.DisplayName .. ")"
+        txt.TextColor3 = Color3.fromRGB(255, 255, 255)
+        txt.TextStrokeTransparency = 0
+        txt.TextSize = 14
+        txt.Parent = bb
+
+        bb.Parent = head
+    end
+
+    if player.Character then addTag(player.Character) end
+    player.CharacterAdded:Connect(addTag)
+end
+
+-- นำไปใช้กับผู้เล่นทุกคนทั้งในเซิร์ฟและคนที่เข้ามาใหม่
+for _, plr in pairs(Players:GetPlayers()) do applyNameESP(plr) end
+Players.PlayerAdded:Connect(applyNameESP)
+
+PlayerTab:CreateToggle({
+    Name = "เปิด/ปิด เห็นชื่อ (Name ESP)",
+    CurrentValue = false,
+    Callback = function(Value)
+        nameESP = Value
+        for _, plr in pairs(Players:GetPlayers()) do
+            if plr.Character and plr.Character:FindFirstChild("Head") then
+                local tag = plr.Character.Head:FindFirstChild("NameESP_Tag")
+                if tag then
+                    tag.Enabled = nameESP
+                end
+            end
+        end
+    end,
+})
+
+PlayerTab:CreateSection("ปรับแต่งตัวละคร")
+
+-- 4. ปรับความเร็ว
+PlayerTab:CreateSlider({
+   Name = "ความเร็วการวิ่ง (WalkSpeed)",
+   Range = {16, 200},
+   Increment = 1,
+   CurrentValue = 16,
+   Callback = function(Value)
+       pcall(function() Players.LocalPlayer.Character.Humanoid.WalkSpeed = Value end)
+   end,
+})
+
+-- 5. ปรับกระโดด
+PlayerTab:CreateSlider({
+   Name = "แรงกระโดด (JumpPower)",
+   Range = {50, 300},
+   Increment = 5,
+   CurrentValue = 50,
+   Callback = function(Value)
+       pcall(function() 
+           local h = Players.LocalPlayer.Character.Humanoid
+           h.UseJumpPower = true
+           h.JumpPower = Value 
+       end)
+   end,
+})
