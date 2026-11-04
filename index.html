@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#07030f">
+<title>NEXORA HUB</title>
+<style>
+:root{--bg:#07030f;--p:#a855f7;--p2:#7c3aed;--glass:rgba(30,16,56,.55);--bd:rgba(168,85,247,.35);--tx:#f3e8ff;--mu:#a99bc4}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0}
+body{background:radial-gradient(ellipse at 20% 0,#2a0f52 0,transparent 55%),radial-gradient(ellipse at 90% 100%,#3b0f6b 0,transparent 50%),var(--bg);color:var(--tx);font:16px/1.5 system-ui,'Noto Sans Thai',sans-serif;min-height:100vh;overflow-x:hidden}
+#bg{position:fixed;inset:0;z-index:-1}
+main{max-width:1000px;margin:0 auto;padding:18px 14px 60px;padding-top:max(18px,env(safe-area-inset-top))}
+.logo{text-align:center;font-size:clamp(34px,10vw,64px);font-weight:900;letter-spacing:.08em;margin:16px 0 4px;cursor:pointer;background:linear-gradient(180deg,#fff,#c084fc 50%,#7c3aed);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 18px rgba(168,85,247,.7);touch-action:manipulation}
+.sub{text-align:center;color:var(--mu);margin:0 0 20px}
+@keyframes fl{50%{transform:translateY(-6px)}}
+.glass{background:rgba(26,14,50,.88);border:1px solid var(--bd);border-radius:18px;box-shadow:0 10px 30px rgba(0,0,0,.5),0 0 22px rgba(168,85,247,.18),inset 0 1px 0 rgba(255,255,255,.12)}
+input,textarea,select{width:100%;background:rgba(10,4,24,.7);border:1px solid var(--bd);color:var(--tx);border-radius:12px;padding:12px 14px;font:inherit;outline:0;transition:.2s}
+input:focus,textarea:focus,select:focus{border-color:var(--p);box-shadow:0 0 14px rgba(168,85,247,.6)}
+textarea{min-height:110px;font-family:ui-monospace,monospace;font-size:13px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:0;cursor:pointer;color:#fff;font:700 15px inherit;padding:12px 18px;border-radius:12px;background:linear-gradient(180deg,#b86bff,var(--p2));box-shadow:0 5px 0 #4c1d95,0 8px 20px rgba(168,85,247,.5);transition:.15s;text-decoration:none}
+.btn{min-height:44px;touch-action:manipulation;user-select:none}@media(hover:hover){.btn:hover{filter:brightness(1.15);transform:translateY(-2px)}}
+.btn:active{transform:translateY(4px);box-shadow:0 1px 0 #4c1d95}
+.btn.g{background:rgba(255,255,255,.08);box-shadow:0 4px 0 rgba(0,0,0,.4);border:1px solid var(--bd)}
+.btn.r{background:linear-gradient(180deg,#f43f5e,#be123c);box-shadow:0 4px 0 #6b0f26}
+.btn.s{padding:8px 12px;font-size:13px}
+.btn.d{background:linear-gradient(180deg,#6d7bff,#4338ca);box-shadow:0 5px 0 #26207a,0 8px 20px rgba(99,102,241,.5)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.row>*{flex:1}
+.top{justify-content:center;margin:14px 0}.top>*{flex:0 1 auto}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px}
+.card{padding:16px;cursor:pointer;transform:perspective(700px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .12s;position:relative;touch-action:manipulation}.card:active{transform:scale(.97)}
+
+.cat{text-align:center}.cat .ic{font-size:44px;text-shadow:0 0 14px var(--p)}
+.cat b{display:block;margin-top:6px}.cat small,.mu{color:var(--mu)}
+.sg{grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
+.thumb{height:130px;border-radius:12px;background:#12062a center/cover;display:grid;place-items:center;font-size:42px;margin-bottom:10px;box-shadow:inset 0 0 30px rgba(168,85,247,.3)}
+.tag{display:inline-block;font-size:12px;padding:2px 10px;border-radius:99px;background:rgba(168,85,247,.2);border:1px solid var(--bd);margin:2px 3px 2px 0;cursor:pointer;color:var(--tx)}
+h2{margin:26px 0 12px;font-size:22px;text-shadow:0 0 14px var(--p)}
+pre{background:#0a0418;border:1px solid var(--bd);border-radius:12px;padding:14px;overflow:auto;max-height:340px;font-size:13px;white-space:pre-wrap;word-break:break-all}
+#eye{position:fixed;top:28px;right:10px;z-index:40;width:44px;height:44px;border-radius:50%;border:1px solid var(--bd);background:rgba(26,14,50,.92);font-size:22px;cursor:pointer;box-shadow:0 0 14px rgba(168,85,247,.5);touch-action:manipulation}#ep{display:none;position:fixed;top:78px;right:10px;z-index:40;padding:12px 16px;font-size:14px;line-height:1.8}
+#toast{opacity:0;pointer-events:none;position:fixed;left:50%;bottom:28px;transform:translate(-50%,120px);background:#1b0b38;border:1px solid var(--p);padding:12px 22px;border-radius:99px;box-shadow:0 0 24px var(--p);transition:.35s;z-index:99;font-weight:700}
+#toast.on{transform:translate(-50%,0);opacity:1}
+.pad{padding:16px}.tabs{display:flex;gap:8px;overflow:auto;margin-bottom:14px}.tabs .btn{flex:none}
+.item{display:flex;gap:10px;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(168,85,247,.2)}
+.item span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+label{display:block;margin:12px 0 4px;color:var(--mu);font-size:14px}
+.chk{display:flex;flex-wrap:wrap;gap:6px}.chk label{margin:0;display:flex;gap:6px;align-items:center;padding:6px 10px;border:1px solid var(--bd);border-radius:99px;color:var(--tx);cursor:pointer}.chk input{width:auto}
+</style>
+</head>
+<body>
+<canvas id="bg"></canvas>
+<main id="app"></main>
+<button id="eye" aria-label="สถิติผู้เข้าชม">👁️</button><div id="ep" class="glass"></div><div id="toast"></div>
+<script>
+// ★ ข้อมูลตั้งต้นของเว็บ: วาง JSON ที่ได้จาก Admin → ตั้งค่า → "คัดลอกข้อมูลทั้งหมด" แทนคำว่า null (ทุกคนจะเห็นข้อมูลนี้)
+const SEED={"discord":"https://discord.gg/","categories":[{"id":"c0","name":"Popular","icon":"🔥"},{"id":"c1","name":"Game Scripts","icon":"🎮"},{"id":"c2","name":"Map Scripts","icon":"🗺️"},{"id":"c3","name":"New Scripts","icon":"✨"},{"id":"c4","name":"Tools","icon":"🛠️"},{"id":"c5","name":"Other","icon":"📦"}],"maps":[{"id":"m0","name":"Demo Map A"},{"id":"m1","name":"Demo Map B"},{"id":"m2","name":"Demo Map C"}],"scripts":[{"id":"s1","name":"Demo Script 1","desc":"สคริปต์ตัวอย่างสำหรับทดลองระบบ","code":"print(\"Hello from NEXORA HUB\")","image":"","categoryId":"c0","mapIds":["m0","m1"]},{"id":"s2","name":"Demo Script 2","desc":"ตัวอย่างสคริปต์ที่รองรับแมพ C","code":"print(\"Demo 2\")","image":"","categoryId":"c1","mapIds":["m2"]},{"id":"s3","name":"Demo Tool","desc":"ตัวอย่างเครื่องมือ","code":"print(\"Tool\")","image":"","categoryId":"c4","mapIds":["m0","m1","m2"]}]};
+// ★ รหัสแอดมินตั้งต้น (แก้ตรงนี้ในไฟล์ได้) — หรือเปลี่ยนในหน้า Admin → ตั้งค่า (มีผลเฉพาะเครื่องที่เปลี่ยน)
+const ADMIN_PASS='aten.255';
+const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let S={online:0,total:0,copies:{}},D={categories:[],maps:[],scripts:[],discord:'#'},T=sessionStorage.getItem('nx_t')||'',tab='scripts',ed=null;
+const demoApi=(u,b)=>{const sv=()=>{try{localStorage.setItem('nx_demo',JSON.stringify(D))}catch{}},id=()=>Math.random().toString(16).slice(2,10);
+ if(u==='/api/visit'||u==='/api/stats')return S;
+ if(u==='/api/copy'){try{localStorage.setItem('nx_ds',JSON.stringify(S))}catch{}return S}
+ const pw=()=>{try{return localStorage.getItem('nx_pw')||ADMIN_PASS}catch{return ADMIN_PASS}};
+ if(u==='/api/login'){if(!b.password||b.password!==pw())throw Error('รหัสผ่านไม่ถูกต้อง');return{token:'demo'}}
+ if(u==='/api/admin/password'){if(b.old!==pw())throw Error('รหัสเดิมไม่ถูกต้อง');if(String(b.new||'').length<6)throw Error('รหัสใหม่ต้องยาวอย่างน้อย 6 ตัว');try{localStorage.setItem('nx_pw',b.new)}catch{throw Error('บันทึกรหัสไม่ได้')}return{ok:1}}
+ if(u==='/api/admin/save'){const{type,item}=b,name=String(item.name||'').trim();if(!name)throw Error('ต้องใส่ชื่อ');const o={...item,name};if(type==='categories')o.icon=o.icon||'📦';if(type==='scripts')o.mapIds=o.mapIds||[];const L=D[type],i=L.findIndex(x=>x.id===item.id);if(i>=0)L[i]={...L[i],...o};else L.push({...o,id:id()});sv();return D}
+ if(u==='/api/admin/delete'){const{type,id:x}=b;D[type]=D[type].filter(i=>i.id!==x);if(type==='categories')D.scripts.forEach(s=>{if(s.categoryId===x)s.categoryId=''});if(type==='maps')D.scripts.forEach(s=>s.mapIds=s.mapIds.filter(m=>m!==x));sv();return D}
+ if(u==='/api/admin/discord'){D.discord=b.url||'';sv();return D}
+ if(u==='/api/admin/upload')return{url:b.dataUrl};
+ throw Error('โหมดทดลองใช้ฟังก์ชันนี้ไม่ได้')};
+const api=async(u,b)=>{if(DEMO)return demoApi(u,b);const r=await fetch(u,{method:b?'POST':'GET',headers:{'Content-Type':'application/json',...(T?{Authorization:'Bearer '+T}:{})},body:b?JSON.stringify(b):undefined});const j=await r.json().catch(()=>({}));if(r.status===401&&T&&u!=='/api/login'){T='';sessionStorage.removeItem('nx_t');route()}if(!r.ok)throw Error(j.error||'error');return j};
+const vid=(()=>{try{let v=localStorage.getItem('nx_v');if(!v){v=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('nx_v',v)}return v}catch{return 'v'+Math.random().toString(36).slice(2)+Date.now().toString(36)}})();
+const fillEp=()=>{$('#ep').innerHTML=`🟢 ออนไลน์ล่าสุด: <b>${S.online}</b> คน<br>👥 เข้าชมทั้งหมด: <b>${S.total}</b> คน<br>📋 คัดลอกรวม: <b>${Object.values(S.copies).reduce((a,b)=>a+b,0)}</b> ครั้ง`};
+const visit=async()=>{try{S=await api('/api/visit',{vid});fillEp()}catch{}};
+$('#eye').onclick=()=>{const p=$('#ep');p.style.display=p.style.display==='block'?'none':'block';fillEp();if(p.style.display==='block')visit()};
+setInterval(()=>{if(!document.hidden)visit()},60000);
+const shrink=f=>new Promise((ok,no)=>{const im=new Image(),u=URL.createObjectURL(f);im.onload=()=>{const k=Math.min(1,720/im.width),c=document.createElement('canvas');c.width=im.width*k;c.height=im.height*k;c.getContext('2d').drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);ok(c.toDataURL('image/jpeg',.75))};im.onerror=()=>no(Error('เปิดรูปไม่ได้'));im.src=u});
+const toast=m=>{const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove('on'),2200)};
+const copy=async id=>{const s=D.scripts.find(x=>x.id===id);if(!s)return;try{await navigator.clipboard.writeText(s.code)}catch{const a=document.createElement('textarea');a.value=s.code;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove()}toast('✅ คัดลอกสคริปต์สำเร็จ!');S.copies[id]=(S.copies[id]||0)+1;api('/api/copy',{id}).then(r=>{if(r&&r.copies){S=r;fillEp()}}).catch(()=>{})};
+const cat=id=>D.categories.find(c=>c.id===id),mp=id=>D.maps.find(m=>m.id===id);
+const hdr=(back)=>`<div class="logo" onclick="go('')">NEXORA HUB</div>${back?`<div class="row top"><a class="btn g s" href="#">← หน้าแรก</a></div>`:''}`;
+const sCard=s=>`<div class="card glass" onclick="go('script/${s.id}')"><div class="thumb" style="${s.image?`background-image:url('${esc(s.image)}')`:''}">${s.image?'':(cat(s.categoryId)?.icon||'📜')}</div><b>${esc(s.name)}</b><div class="mu" style="font-size:14px;max-height:44px;overflow:hidden">${esc(s.desc)}</div><div style="margin:6px 0">${cat(s.categoryId)?`<span class="tag">${esc(cat(s.categoryId).name)}</span>`:''}<span class="tag">🗺️ ${s.mapIds.length} แมพ</span><span class="tag">📋 ${S.copies[s.id]||0}</span></div><button class="btn s" style="width:100%" onclick="event.stopPropagation();copy('${s.id}')">📋 COPY SCRIPT</button></div>`;
+const list=a=>a.length?`<div class="grid sg">${a.map(sCard).join('')}</div>`:`<p class="mu" style="text-align:center">ไม่พบสคริปต์</p>`;
+const match=(s,q)=>(s.name+' '+s.desc).toLowerCase().includes(q.toLowerCase());
+
+function home(){
+  $('#app').innerHTML=`${hdr()}<p class="sub">คลังสคริปต์เกม • ค้นหาแมพ • คัดลอกในคลิกเดียว</p>
+  <div class="row top"><a class="btn d" href="${esc(D.discord)}" target="_blank" rel="noopener">💬 Discord</a><a class="btn g" href="#admin">🔐 Admin</a></div>
+  <div class="glass pad"><div class="row"><div><input id="qs" placeholder="🔎 ค้นหาสคริปต์..." autocomplete="off"></div><div style="position:relative"><input id="qm" placeholder="🗺️ ค้นหาแมพ..." autocomplete="off"><div id="mr" class="glass" style="display:none;position:absolute;left:0;right:0;top:100%;margin-top:6px;z-index:5;padding:8px;max-height:220px;overflow:auto"></div></div></div></div>
+  <h2>🏆 สคริปต์ที่คนคัดลอกมากที่สุด</h2><div class="glass pad">${(()=>{const top=D.scripts.map(s=>[s,S.copies[s.id]||0]).filter(x=>x[1]>0).sort((a,b)=>b[1]-a[1]).slice(0,5);return top.length?top.map(([s,n],i)=>`<div class="item" style="cursor:pointer" onclick="go('script/${s.id}')"><span>${['🥇','🥈','🥉','4️⃣','5️⃣'][i]} ${esc(s.name)}</span><b style="flex:none">📋 ${n}</b></div>`).join(''):'<span class="mu">ยังไม่มีการคัดลอก — ลองกด COPY สักอัน</span>'})()}</div>
+  <h2>📂 หมวดหมู่</h2><div class="grid">${D.categories.map(c=>`<div class="card glass cat" onclick="go('cat/${c.id}')"><div class="ic">${esc(c.icon)}</div><b>${esc(c.name)}</b><small>${D.scripts.filter(s=>s.categoryId===c.id).length} สคริปต์</small></div>`).join('')}<div class="card glass cat" onclick="go('maps')"><div class="ic">🌌</div><b>Map Explorer</b><small>${D.maps.length} แมพ</small></div></div>
+  <div id="lw"></div>`;
+  const draw=()=>{const q=$('#qs').value.trim();$('#lw').innerHTML=q?'<h2>ผลการค้นหา</h2>'+list(D.scripts.filter(s=>match(s,q)).slice(0,100)):''};
+  $('#qs').oninput=draw;draw();
+  $('#qm').oninput=e=>{const q=e.target.value.trim().toLowerCase(),r=D.maps.filter(m=>m.name.toLowerCase().includes(q)).slice(0,20),b=$('#mr');b.style.display=q?'block':'none';b.innerHTML=r.length?r.map(m=>`<span class="tag" onclick="go('map/${m.id}')">${esc(m.name)}</span>`).join(''):'<span class="mu">ไม่พบแมพ</span>'};
+}
+function catPage(id){const c=cat(id);if(!c)return home();$('#app').innerHTML=`${hdr(1)}<h2>${esc(c.icon)} ${esc(c.name)}</h2><div class="glass pad" style="margin-bottom:14px"><input id="q" placeholder="🔎 ค้นหาในหมวดนี้..."></div><div id="ls"></div>`;const d=()=>$('#ls').innerHTML=list(D.scripts.filter(s=>s.categoryId===id&&(!$('#q').value||match(s,$('#q').value))));$('#q').oninput=d;d()}
+function mapsPage(){$('#app').innerHTML=`${hdr(1)}<h2>🌌 Map Explorer</h2><div class="glass pad"><input id="q" placeholder="🗺️ ค้นหาแมพ..."></div><div id="ls" class="grid" style="margin-top:14px"></div>`;const d=()=>{const q=$('#q').value.toLowerCase();$('#ls').innerHTML=D.maps.filter(m=>m.name.toLowerCase().includes(q)).map(m=>`<div class="card glass cat" onclick="go('map/${m.id}')">${m.image?`<div class="thumb" style="background-image:url('${esc(m.image)}')"></div>`:'<div class="ic">🗺️</div>'}<b>${esc(m.name)}</b><small>${D.scripts.filter(s=>s.mapIds.includes(m.id)).length} สคริปต์</small></div>`).join('')||'<p class="mu">ไม่พบแมพ</p>'};$('#q').oninput=d;d()}
+function mapPage(id){const m=mp(id);if(!m)return mapsPage();$('#app').innerHTML=`${hdr()}<div class="row top"><a class="btn g s" href="#maps">← แมพทั้งหมด</a></div>${m.image?`<img src="${esc(m.image)}" alt="" style="width:100%;max-height:220px;object-fit:cover;border-radius:16px;box-shadow:0 0 24px rgba(168,85,247,.5)">`:''}<h2>🗺️ ${esc(m.name)}</h2>${list(D.scripts.filter(s=>s.mapIds.includes(id)))}`}
+function scriptPage(id){const s=D.scripts.find(x=>x.id===id);if(!s)return home();$('#app').innerHTML=`${hdr(1)}<div class="glass pad">${s.image?`<img src="${esc(s.image)}" alt="" style="width:100%;max-height:300px;object-fit:cover;border-radius:14px;margin-bottom:12px">`:''}<h2 style="margin:0">${esc(s.name)}</h2>${cat(s.categoryId)?`<span class="tag" onclick="go('cat/${s.categoryId}')">${esc(cat(s.categoryId).name)}</span>`:''}<p style="white-space:pre-wrap">${esc(s.desc)}</p><b>🗺️ แมพที่รองรับ</b><div style="margin:6px 0 14px">${s.mapIds.map(i=>mp(i)).filter(Boolean).map(m=>`<span class="tag" onclick="go('map/${m.id}')">${m.image?`<img src="${esc(m.image)}" alt="" style="width:28px;height:20px;object-fit:cover;border-radius:4px;vertical-align:middle;margin-right:6px">`:''}${esc(m.name)}</span>`).join('')||'<span class="mu">ไม่ระบุ</span>'}</div><pre>${esc(s.code)}</pre><button class="btn" style="width:100%;margin-top:12px" onclick="copy('${s.id}')">📋 COPY SCRIPT</button></div>`}
+
+// ---------- ADMIN ----------
+const act=async(fn,ok)=>{try{const r=await fn();if(r&&r.categories)D=r;if(ok)toast(ok);admin()}catch(e){toast('❌ '+e.message)}};
+function admin(){
+  if(!T){$('#app').innerHTML=`${hdr(1)}<div class="glass pad" style="max-width:380px;margin:auto"><h2 style="margin-top:0">🔐 Admin Login</h2><input id="pw" type="password" placeholder="รหัสผ่าน"><button class="btn" style="width:100%;margin-top:12px" id="lg">เข้าสู่ระบบ</button></div>`;const go=async()=>{try{T=(await api('/api/login',{password:$('#pw').value})).token;sessionStorage.setItem('nx_t',T);toast('✅ เข้าสู่ระบบแล้ว');admin()}catch(e){toast('❌ '+e.message)}};$('#lg').onclick=go;$('#pw').onkeydown=e=>e.key==='Enter'&&go();return}
+  const tabs=[['scripts','📜 สคริปต์'],['categories','📂 หมวดหมู่'],['maps','🗺️ แมพ'],['settings','⚙️ ตั้งค่า']];
+  $('#app').innerHTML=`${hdr(1)}<div class="tabs">${tabs.map(([k,l])=>`<button class="btn s ${tab===k?'':'g'}" onclick="tab='${k}';ed=null;admin()">${l}</button>`).join('')}<button class="btn s r" onclick="T='';sessionStorage.removeItem('nx_t');admin()">ออกจากระบบ</button></div><div class="glass pad" id="ad"></div>`;
+  const A=$('#ad');
+  if(tab==='scripts'){const s=ed&&ed!=='new'?D.scripts.find(x=>x.id===ed):{name:'',desc:'',code:'',image:'',categoryId:'',mapIds:[]};
+    if(ed&&s){A.innerHTML=`<b>${ed==='new'?'เพิ่มสคริปต์':'แก้ไขสคริปต์'}</b><label>ชื่อสคริปต์</label><input id="n" value="${esc(s.name)}"><label>รายละเอียด</label><textarea id="d" style="font-family:inherit;font-size:15px">${esc(s.desc)}</textarea><label>โค้ดสคริปต์</label><textarea id="c" style="min-height:180px">${esc(s.code)}</textarea><label>ภาพปกสคริปต์</label><input id="f" type="file" accept="image/*">${s.image?`<img id="pv" src="${esc(s.image)}" style="max-height:90px;margin-top:8px;border-radius:8px">`:''}<label>หมวดหมู่</label><select id="k"><option value="">— ไม่ระบุ —</option>${D.categories.map(c=>`<option value="${c.id}" ${c.id===s.categoryId?'selected':''}>${esc(c.icon+' '+c.name)}</option>`).join('')}</select><label>แมพที่รองรับ</label><div class="chk">${D.maps.map(m=>`<label><input type="checkbox" value="${m.id}" ${s.mapIds.includes(m.id)?'checked':''}>${esc(m.name)}</label>`).join('')||'<span class="mu">ยังไม่มีแมพ — เพิ่มที่แท็บ "แมพ"</span>'}</div><div class="row" style="margin-top:16px"><button class="btn" id="sv">💾 บันทึก</button><button class="btn g" onclick="ed=null;admin()">ยกเลิก</button></div>`;
+      $('#sv').onclick=()=>act(async()=>{let img=s.image;const f=$('#f').files[0];if(f){if(f.size>5e6)throw Error('ภาพใหญ่เกิน 5MB');const u=await shrink(f);img=(await api('/api/admin/upload',{dataUrl:u})).url}
+        const r=await api('/api/admin/save',{type:'scripts',item:{id:ed==='new'?undefined:ed,name:$('#n').value,desc:$('#d').value,code:$('#c').value,image:img,categoryId:$('#k').value,mapIds:[...A.querySelectorAll('.chk input:checked')].map(i=>i.value)}});ed=null;return r},'✅ บันทึกแล้ว');return}
+    A.innerHTML=`<button class="btn" onclick="ed='new';admin()">➕ เพิ่มสคริปต์</button><p class="mu">ทั้งหมด ${D.scripts.length} สคริปต์</p>${D.scripts.map(x=>`<div class="item"><span>${esc(x.name)}</span><span style="flex:none"><button class="btn s g" onclick="ed='${x.id}';admin()">✏️</button> <button class="btn s r" onclick="if(confirm('ลบสคริปต์นี้?'))act(()=>api('/api/admin/delete',{type:'scripts',id:'${x.id}'}),'🗑️ ลบแล้ว')">🗑️</button></span></div>`).join('')}`;return}
+  if(tab==='categories'||tab==='maps'){const c=tab==='categories';
+    A.innerHTML=`<div class="row"><input id="n" placeholder="ชื่อ${c?'หมวดหมู่':'แมพ'}ใหม่">${c?'<input id="i" placeholder="ไอคอน เช่น 🎮" style="max-width:130px">':'<input id="mf" type="file" accept="image/*" title="ภาพปกแมพ" style="max-width:200px">'}<button class="btn" id="ad2" style="flex:none">➕ เพิ่ม</button></div>${D[tab].map(x=>`<div class="item"><span>${c?esc(x.icon)+' ':(x.image?`<img src="${esc(x.image)}" alt="" style="width:44px;height:30px;object-fit:cover;border-radius:6px;margin-right:8px;vertical-align:middle">`:'')}${esc(x.name)}</span><span style="flex:none">${c?'':`<button class="btn s g" onclick="mi('${x.id}')">🖼️</button> `}<button class="btn s g" onclick="rn('${x.id}')">✏️</button> <button class="btn s r" onclick="if(confirm('ลบ?'))act(()=>api('/api/admin/delete',{type:'${tab}',id:'${x.id}'}),'🗑️ ลบแล้ว')">🗑️</button></span></div>`).join('')}`;
+    $('#ad2').onclick=()=>act(async()=>{let image;if(!c&&$('#mf').files[0])image=(await api('/api/admin/upload',{dataUrl:await shrink($('#mf').files[0])})).url;return api('/api/admin/save',{type:tab,item:{name:$('#n').value,icon:c?$('#i').value:undefined,image}})},'✅ เพิ่มแล้ว');return}
+  A.innerHTML=`<b>🔗 ลิงก์ Discord</b><div class="row" style="margin:8px 0 20px"><input id="dc" value="${esc(D.discord)}"><button class="btn" id="sd" style="flex:none">บันทึก</button></div><b>🔑 เปลี่ยนรหัสแอดมิน</b><input id="o" type="password" placeholder="รหัสเดิม" style="margin:8px 0"><input id="w" type="password" placeholder="รหัสใหม่ (6 ตัวขึ้นไป)"><button class="btn" id="sp" style="margin-top:10px">เปลี่ยนรหัส</button>`;
+  if(DEMO){A.insertAdjacentHTML('beforeend',`<hr style="border:0;border-top:1px solid var(--bd);margin:20px 0"><b>📦 สำรอง / นำเข้าข้อมูล</b><p class="mu" style="font-size:13px">เว็บนี้ไม่มีเซิร์ฟเวอร์ ข้อมูลที่เพิ่มจะอยู่ในเครื่องคุณเท่านั้น กด "คัดลอกข้อมูลทั้งหมด" แล้วนำไปวางแทน <code>null</code> ที่ <code>const SEED</code> ในไฟล์ index.html เพื่อให้ทุกคนเห็นข้อมูลเดียวกัน</p><button class="btn" id="ex">📤 คัดลอกข้อมูลทั้งหมด</button><textarea id="im" placeholder="วาง JSON ที่นี่เพื่อนำเข้า" style="margin-top:12px"></textarea><button class="btn g" id="imb" style="margin-top:8px">📥 นำเข้า</button>`);
+    $('#ex').onclick=async()=>{const t=JSON.stringify(D);try{await navigator.clipboard.writeText(t)}catch{$('#im').value=t;$('#im').select();document.execCommand('copy')}toast('✅ คัดลอกข้อมูลแล้ว')};
+    $('#imb').onclick=()=>{try{const x=JSON.parse($('#im').value);if(!x.categories||!x.maps||!x.scripts)throw 0;D=x;localStorage.setItem('nx_demo',JSON.stringify(D));toast('✅ นำเข้าแล้ว');admin()}catch{toast('❌ JSON ไม่ถูกต้อง')}}}
+  $('#sd').onclick=()=>act(()=>api('/api/admin/discord',{url:$('#dc').value}),'✅ บันทึก Discord แล้ว');
+  $('#sp').onclick=async()=>{try{await api('/api/admin/password',{old:$('#o').value,new:$('#w').value});T='';sessionStorage.removeItem('nx_t');toast('✅ เปลี่ยนรหัสแล้ว กรุณาเข้าสู่ระบบใหม่');admin()}catch(e){toast('❌ '+e.message)}};
+}
+function mi(id){const f=document.createElement('input');f.type='file';f.accept='image/*';f.onchange=()=>f.files[0]&&act(async()=>{const x=D.maps.find(m=>m.id===id),u=(await api('/api/admin/upload',{dataUrl:await shrink(f.files[0])})).url;return api('/api/admin/save',{type:'maps',item:{...x,image:u}})},'✅ เปลี่ยนรูปแล้ว');f.click()}
+function rn(id){const x=D[tab].find(i=>i.id===id),n=prompt('ชื่อใหม่',x.name);if(!n)return;const it={...x,name:n};if(tab==='categories'){const i=prompt('ไอคอน',x.icon);if(i)it.icon=i}act(()=>api('/api/admin/save',{type:tab,item:it}),'✅ แก้ไขแล้ว')}
+
+// ---------- START + LOADSTRING (trial) ----------
+function start(){$('#app').innerHTML=`${hdr()}<p class="sub">เลือกสิ่งที่ต้องการใช้งาน</p><div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));max-width:620px;margin:30px auto"><div class="card glass cat" style="padding:30px 16px" onclick="go('home')"><div class="ic">📜</div><b style="font-size:20px">Script</b><small>คลังสคริปต์ + ค้นหาแมพ</small></div><div class="card glass cat" style="padding:30px 16px" onclick="go('ls')"><div class="ic">⚡</div><b style="font-size:20px">Loadstring</b><small>ย่อลิงก์เป็น loadstring <span class="tag" style="cursor:default">ทดลอง</span></small></div></div><div class="row top"><a class="btn d" href="${esc(D.discord)}" target="_blank" rel="noopener">💬 Discord</a><a class="btn g" href="#admin">🔐 Admin</a></div>`}
+function lsPage(){$('#app').innerHTML=`${hdr(1)}<h2>⚡ Loadstring <span class="tag" style="cursor:default">ทดลอง</span></h2><div class="glass pad"><label style="margin-top:0">ใส่ข้อความ / ลิงก์สคริปต์</label><textarea id="li" style="min-height:90px" placeholder="https://example.com/script.lua" spellcheck="false"></textarea><div class="row" style="margin-top:12px"><button class="btn" id="lb">⚡ ย่อ</button><button class="btn g" id="lc">🧹 ล้างข้อความ</button></div><label>ผลลัพธ์</label><pre id="lo" style="min-height:60px;max-height:none">—</pre><button class="btn" id="lcp" style="width:100%;margin-top:6px">📋 COPY ผลลัพธ์</button></div>`;
+  let out='';const gen=()=>{const v=$('#li').value.trim();if(!v){toast('⚠️ กรุณาใส่ข้อความก่อน');return}out='loadstring(game:HttpGet("'+v.replace(/\\/g,'\\\\').replace(/"/g,'\\"').replace(/\s*\n\s*/g,'')+'"))()';$('#lo').textContent=out};
+  $('#lb').onclick=gen;
+  $('#lc').onclick=()=>{$('#li').value='';out='';$('#lo').textContent='—';$('#li').focus()};
+  $('#lcp').onclick=async()=>{if(!out){toast('⚠️ ยังไม่มีผลลัพธ์ กด "ย่อ" ก่อน');return}try{await navigator.clipboard.writeText(out)}catch{const a=document.createElement('textarea');a.value=out;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove()}toast('✅ คัดลอกผลลัพธ์สำเร็จ!')}}
+let cur='';try{cur=location.hash.slice(1)}catch{}
+function go(p){cur=p;try{history.replaceState(null,'',p?'#'+p:location.pathname+location.search)}catch{}route()}
+function route(){const [p,id]=cur.split('/');window.scrollTo(0,0);({home,ls:lsPage,cat:()=>catPage(id),maps:mapsPage,map:()=>mapPage(id),script:()=>scriptPage(id),admin}[p]||start)()}
+window.onhashchange=()=>{try{cur=location.hash.slice(1)}catch{}route()};
+document.addEventListener('click',e=>{const a=e.target.closest&&e.target.closest('a[href^="#"]');if(a){e.preventDefault();go(a.getAttribute('href').slice(1))}});
+if(matchMedia('(hover:hover) and (pointer:fine)').matches){let cur=null,q=0;const clr=x=>{x&&x.style.removeProperty('--rx');x&&x.style.removeProperty('--ry')};document.addEventListener('pointermove',e=>{if(q)return;q=requestAnimationFrame(()=>{q=0;const c=e.target.closest&&e.target.closest('.card');if(cur&&cur!==c)clr(cur);cur=c;if(c){const r=c.getBoundingClientRect();c.style.setProperty('--ry',((e.clientX-r.left)/r.width-.5)*12+'deg');c.style.setProperty('--rx',-((e.clientY-r.top)/r.height-.5)*12+'deg')}})})}
+// cosmic background (เบา: ดาวน้อย, 20fps, หยุดเมื่อซ่อนแท็บ)
+(()=>{const c=$('#bg'),g=c.getContext('2d');let W,H,S=[],last=0;const rs=()=>{W=c.width=innerWidth;H=c.height=innerHeight;S=Array.from({length:Math.min(55,W/10)},()=>({x:Math.random()*W,y:Math.random()*H,z:Math.random()*1.6+.5}))};rs();addEventListener('resize',rs);
+(function f(t){requestAnimationFrame(f);if(document.hidden||t-last<50)return;last=t;g.clearRect(0,0,W,H);g.fillStyle='#e9d5ff';for(const s of S){s.y+=s.z*.35;if(s.y>H)s.y=0;g.fillRect(s.x,s.y,s.z,s.z)}})(0)})();
+let DEMO=false;
+api('/api/data').then(async d=>{D=d;await visit();route()}).catch(()=>{
+  // ไม่มีเซิร์ฟเวอร์ (เช่นเปิดไฟล์ตรงๆ) → โหมดทดลองด้วยข้อมูลตัวอย่าง
+  DEMO=true;try{const x=JSON.parse(localStorage.getItem('nx_ds'));if(x)S=x}catch{}S.online=1;S.total=(S.total||0)+1;try{localStorage.setItem('nx_ds',JSON.stringify(S))}catch{}const c=[['Popular','🔥'],['Game Scripts','🎮'],['Map Scripts','🗺️'],['New Scripts','✨'],['Tools','🛠️'],['Other','📦']].map(([name,icon],i)=>({id:'c'+i,name,icon}));
+  const m=['Demo Map A','Demo Map B','Demo Map C'].map((name,i)=>({id:'m'+i,name}));
+  D={discord:'https://discord.gg/',categories:c,maps:m,scripts:[
+    {id:'s1',name:'Demo Script 1',desc:'สคริปต์ตัวอย่างสำหรับทดลองระบบ',code:'print("Hello from NEXORA HUB")',image:'',categoryId:'c0',mapIds:['m0','m1']},
+    {id:'s2',name:'Demo Script 2',desc:'ตัวอย่างสคริปต์ที่รองรับแมพ C',code:'print("Demo 2")',image:'',categoryId:'c1',mapIds:['m2']},
+    {id:'s3',name:'Demo Tool',desc:'ตัวอย่างเครื่องมือ',code:'print("Tool")',image:'',categoryId:'c4',mapIds:['m0','m1','m2']}]};
+  if(SEED&&SEED.categories)D=JSON.parse(JSON.stringify(SEED));
+  try{const x=JSON.parse(localStorage.getItem('nx_demo'));if(x&&x.categories)D=x}catch{}
+  route();
+});
+</script>
+</body>
+</html>
